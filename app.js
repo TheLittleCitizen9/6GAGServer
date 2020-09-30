@@ -5,6 +5,7 @@ const path = require("path");
 const cors = require("cors")
 
 var allImages = []
+var imageToUser = {}
 // storage engine 
 
 var corsOptions = {
@@ -34,6 +35,7 @@ app.post("/upload", upload.single('profile'), (req, res) => {
         success: 1,
         profile_url: `http://localhost:3001/profile/${req.file.filename}`
     })
+    imageToUser[req.body['name']] = `http://localhost:3001/profile/${req.file.filename}`
     allImages.push(`http://localhost:3001/profile/${req.file.filename}`)
 })
 
