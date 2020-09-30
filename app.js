@@ -2,8 +2,17 @@ const express = require('express');
 const app = express();
 const multer = require("multer");
 const path = require("path");
+const cors = require("cors")
 
+var allImages = []
 // storage engine 
+
+var corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200
+  }
+
+app.use(cors(corsOptions));
 
 const storage = multer.diskStorage({
     destination: './upload/images',
@@ -25,6 +34,11 @@ app.post("/upload", upload.single('profile'), (req, res) => {
         success: 1,
         profile_url: `http://localhost:3001/profile/${req.file.filename}`
     })
+    allImages.push(`http://localhost:3001/profile/${req.file.filename}`)
+})
+
+app.get("/getAll", (req, res) => {
+    res.send(allImages)
 })
 
 function errHandler(err, req, res, next) {
