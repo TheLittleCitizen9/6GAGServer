@@ -5,6 +5,8 @@ const path = require("path");
 const cors = require("cors")
 const testFolder = './upload/images/';
 const fs = require('fs');
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
 
 const url = "http://localhost:3001/profile/"
 
@@ -15,6 +17,25 @@ var corsOptions = {
     origin: 'http://localhost:3000',
     optionsSuccessStatus: 200
   }
+
+const swaggerOptions = {
+swaggerDefinition: {
+    info: {
+    version: "1.0.0",
+    title: "Images API",
+    description: "Images API Information",
+    contact: {
+        name: "Amazing Developer"
+    },
+    servers: ["http://localhost:3001"]
+    }
+},
+// ['.routes/*.js']
+apis: ["app.js"]
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(cors(corsOptions));
 
@@ -50,6 +71,15 @@ var getAllImages = function(req, res, next){
       next()
 }
 
+/**
+ * @swagger
+ * /getAll:
+ *  get:
+ *    description: Use to request all images
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.use("/getAll", getAllImages)
 app.get("/getAll", (req, res) => {
     res.send(allImages)
