@@ -89,7 +89,27 @@ app.put("/dislike", (req, res) =>{
     })
 })
 
-
+/**
+ * @swagger
+ * /upload:
+ *  post:
+ *    description: Use to request all images
+ *    parameters:
+ *      - in: query
+ *        name: name
+ *        description: Name of the user
+ *        required: true
+ *        schema:
+ *           type: string
+ *      - in: formData
+ *        name: profile
+ *        description: Image to upload
+ *        required: true
+ *        type: file
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.use('/profile', express.static('upload/images'));
 app.post("/upload", upload.single('profile'), (req, res) => {
     imageToUser[req.body['name']] = `${url}${req.file.filename}`
