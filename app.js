@@ -69,7 +69,7 @@ const addLike = function(req, res, next){
  *    parameters:
  *      - in: query
  *        name: img
- *        description: Name of the user
+ *        description: Url of the image
  *        required: true
  *        schema:
  *           type: string
@@ -103,7 +103,7 @@ const addDislike = function(req, res, next){
  *    parameters:
  *      - in: query
  *        name: img
- *        description: Name of the user
+ *        description: Url of the image
  *        required: true
  *        schema:
  *           type: string
