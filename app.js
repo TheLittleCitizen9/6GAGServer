@@ -30,7 +30,6 @@ swaggerDefinition: {
     servers: ["http://localhost:3001"]
     }
 },
-// ['.routes/*.js']
 apis: ["app.js"]
 };
 
