@@ -3,10 +3,13 @@ const app = express();
 const multer = require("multer");
 const path = require("path");
 const cors = require("cors")
+const testFolder = './upload/images/';
+const fs = require('fs');
+
+const url = "http://localhost:3001/profile/"
 
 var allImages = []
 var imageToUser = {}
-// storage engine 
 
 var corsOptions = {
     origin: 'http://localhost:3000',
@@ -33,12 +36,23 @@ app.post("/upload", upload.single('profile'), (req, res) => {
 
     res.json({
         success: 1,
-        profile_url: `http://localhost:3001/profile/${req.file.filename}`
+        profile_url: `${url}${req.file.filename}`
     })
-    imageToUser[req.body['name']] = `http://localhost:3001/profile/${req.file.filename}`
-    allImages.push(`http://localhost:3001/profile/${req.file.filename}`)
+    imageToUser[req.body['name']] = `${url}${req.file.filename}`
 })
 
+var getAllImages = function(req, res, next){
+    fs.readdirSync(testFolder).forEach(file => {
+        if(!allImages.includes(`${url}${file}`)){
+                allImages.push(`${url}${file}`)
+                console.log(file);
+            }
+    })
+      console.log(allImages)
+      next()
+}
+
+app.use("/getAll", getAllImages)
 app.get("/getAll", (req, res) => {
     res.send(allImages)
 })
