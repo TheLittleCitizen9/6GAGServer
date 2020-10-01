@@ -10,8 +10,8 @@ const swaggerUi = require("swagger-ui-express");
 
 const url = "http://localhost:3001/profile/"
 
-var allImages = []
 var imageToUser = {}
+var imageToVotes = {}
 
 var corsOptions = {
     origin: 'http://localhost:3000',
@@ -53,21 +53,58 @@ const upload = multer({
     }
 })
 
+const addLike = function(req, res, next){
+    for(var key in imageToVotes){
+        if(req.body['img'] === key){
+            imageToVotes[key]  += 1
+        }
+    }
+      next()
+}
+
+app.use(express.json());
+app.use(express.urlencoded());
+app.use('/like', addLike)
+app.put("/like", (req, res) =>{
+    res.json({
+        success: 1
+    })
+})
+
+const addDislike = function(req, res, next){
+    for(var key in imageToVotes){
+        if(req.body['img'] === key){
+            imageToVotes[key]  = imageToVotes[key] -1
+        }
+    }
+      next()
+}
+
+app.use(express.json());
+app.use(express.urlencoded());
+app.use('/dislike', addDislike)
+app.put("/dislike", (req, res) =>{
+    res.json({
+        success: 1
+    })
+})
+
 
 app.use('/profile', express.static('upload/images'));
 app.post("/upload", upload.single('profile'), (req, res) => {
+    imageToUser[req.body['name']] = `${url}${req.file.filename}`
+    imageToVotes[`${url}${req.file.filename}`] = 0
 
     res.json({
         success: 1,
         profile_url: `${url}${req.file.filename}`
     })
-    imageToUser[req.body['name']] = `${url}${req.file.filename}`
 })
 
-var getAllImages = function(req, res, next){
+const getAllImages = function(req, res, next){
     fs.readdirSync(testFolder).forEach(file => {
-        if(!allImages.includes(`${url}${file}`)){
-                allImages.push(`${url}${file}`)
+        if(imageToVotes === {}){
+                imageToVotes[`${url}${file}`] = 0
             }
     })
       next()
@@ -84,7 +121,7 @@ var getAllImages = function(req, res, next){
  */
 app.use("/getAll", getAllImages)
 app.get("/getAll", (req, res) => {
-    res.send(allImages)
+    res.send(imageToVotes)
 })
 
 function errHandler(err, req, res, next) {
