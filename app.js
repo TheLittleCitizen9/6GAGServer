@@ -62,6 +62,22 @@ const addLike = function(req, res, next){
       next()
 }
 
+/**
+ * @swagger
+ * /like:
+ *  put:
+ *    description: Use to increase the votes by 1
+ *    parameters:
+ *      - in: query
+ *        name: img
+ *        description: Name of the user
+ *        required: true
+ *        schema:
+ *           type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.use(express.json());
 app.use(express.urlencoded());
 app.use('/like', addLike)
@@ -80,6 +96,22 @@ const addDislike = function(req, res, next){
       next()
 }
 
+/**
+ * @swagger
+ * /dislike:
+ *  put:
+ *    description: Use to decrease the votes by 1
+ *    parameters:
+ *      - in: query
+ *        name: img
+ *        description: Name of the user
+ *        required: true
+ *        schema:
+ *           type: string
+ *    responses:
+ *      '200':
+ *        description: A successful response
+ */
 app.use(express.json());
 app.use(express.urlencoded());
 app.use('/dislike', addDislike)
