@@ -52,6 +52,8 @@ const upload = multer({
         fileSize: 1000000
     }
 })
+
+
 app.use('/profile', express.static('upload/images'));
 app.post("/upload", upload.single('profile'), (req, res) => {
 
