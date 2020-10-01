@@ -45,10 +45,8 @@ var getAllImages = function(req, res, next){
     fs.readdirSync(testFolder).forEach(file => {
         if(!allImages.includes(`${url}${file}`)){
                 allImages.push(`${url}${file}`)
-                console.log(file);
             }
     })
-      console.log(allImages)
       next()
 }
 
